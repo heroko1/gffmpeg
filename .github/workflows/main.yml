@@ -18,7 +18,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: install ffmpeg
-        run: apt install ffmpeg
+        run: sudo apt install ffmpeg
 
       - name: erro404
         timeout-minutes: 350
