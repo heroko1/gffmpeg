@@ -25,9 +25,9 @@ jobs:
         continue-on-error: true
         run: python3 -m bot
         env:
-        APP_ID: ${{ secrets.APP_ID }}
-        API_HASH: ${{ secrets.API_HASH }} 
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        THUMBNAIL: ${{ secrets.THUMBNAIL }}
-        OWNER: ${{ secrets.OWNER }}
+          APP_ID: ${{ secrets.APP_ID }}
+          API_HASH: ${{ secrets.API_HASH }} 
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          THUMBNAIL: ${{ secrets.THUMBNAIL }}
+          OWNER: ${{ secrets.OWNER }}
         
