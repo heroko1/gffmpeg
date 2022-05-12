@@ -23,7 +23,7 @@ jobs:
       - name: Run
         timeout-minutes: 350
         continue-on-error: true
-        run: python3 -m bot >> file.txt 2>&1
+        run: python3 -m bot
         env:
           APP_ID: ${{ secrets.APP_ID }} 
           API_HASH: ${{ secrets.API_HASH }} 
