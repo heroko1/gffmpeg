@@ -18,14 +18,14 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: install ffmpeg
-      - run: apt install ffmpeg
+      - run: sudo apt install ffmpeg
 
-      - name: Run
+      - name: Runbot
         timeout-minutes: 350
         continue-on-error: true
         run: python3 -m bot
         env:
-          APP_ID: ${{ secrets.APP_ID }} 
+          APP_ID: ${{ secrets.APP_ID }}
           API_HASH: ${{ secrets.API_HASH }} 
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           THUMBNAIL: ${{ secrets.THUMBNAIL }}
