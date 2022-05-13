@@ -1,4 +1,4 @@
-name: bruh
+name: bot
 
 on:
   workflow_dispatch:
@@ -13,14 +13,14 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-          
+      
       - name: install requirements
         run: pip install -r requirements.txt
 
       - name: install ffmpeg
-      - run: sudo apt install ffmpeg
+        run: sudo apt install ffmpeg
 
-      - name: Runbot
+      - name: erro404
         timeout-minutes: 350
         continue-on-error: true
         run: python3 -m bot
@@ -30,3 +30,4 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           THUMBNAIL: ${{ secrets.THUMBNAIL }}
           OWNER: ${{ secrets.OWNER }}
+          
