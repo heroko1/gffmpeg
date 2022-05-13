@@ -196,6 +196,7 @@ async def encod(event):
         kk = dl.split("/")[-1]
         aa = kk.split(".")[-1]
         rr = f"encode"
+        thumb = 'thumb1.jpg'
         bb = kk.replace(f".{aa}", ".mkv")
         newFile = dl.replace(f"downloads/", "").replace(f"_", " ")
         out = f"{rr}/{bb}"
@@ -213,7 +214,7 @@ async def encod(event):
             ],
         )
         cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
-        cmd1 = f'ffmpeg -i "{dl}" -map 0:v -map 0:a -ss 00:30 -t 30 "{output}" -y'
+        cmd1 = f'ffmpeg -i "{dl}" -map 0 -ss 00:20 -frames:v 1 "{thumb}" -y'
         await run_subprocess(cmd1)
         process = await asyncio.create_subprocess_shell(
             cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
@@ -254,10 +255,10 @@ async def encod(event):
         a2 = await info(out, e)
         dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
         ds = await e.client.send_file(
-            e.chat_id, file=ok, caption=bb, link_preview=False, thumb=output, supports_streaming=True, name=bb
+            e.chat_id, file=ok, caption=bb, link_preview=False, thumb=thumb, supports_streaming=True, name=bb
         )
         os.remove(dl)
-        os.remove(output)
+        os.remove(thumb)
         os.remove(out)
         WORKING.clear()
     except BaseException as er:
