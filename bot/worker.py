@@ -39,6 +39,7 @@ async def dl_link(event):
     if not link:
         return
     if WORKING or QUEUE:
+        await asyncio.sleep(2.5)
         QUEUE.update({link: name})
         return await event.reply(f"**✅ Added {link} in QUEUE**")
     WORKING.append(1)
@@ -108,7 +109,7 @@ async def dl_link(event):
     a2 = await info(out, xxx)
     dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxxx}</i>"
     ds = await event.client.send_file(
-        event.chat_id, file=ok, caption=dk, force_document=True, link_preview=False, thumb=thum, parse_mode="html"
+        event.chat_id, file=ok, caption=ok, force_document=True, link_preview=False, thumb=thum, name=ok
     )
     os.remove(dl)
     os.remove(out)
@@ -132,7 +133,7 @@ async def encod(event):
         else:
             return
         if WORKING or QUEUE:
-            time.sleep(2)
+            await asyncio.sleep(2.5)
             xxx = await event.reply("**Adding To Queue...**")
             # id = pack_bot_file_id(event.media)
             doc = event.media.document
@@ -242,8 +243,8 @@ async def encod(event):
         a1 = await info(dl, e)
         a2 = await info(out, e)
         dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
-        ds = await e.client.send_file(
-            e.chat_id, file=ok, force_document=True, caption=dk, link_preview=False, thumb=thum, parse_mode="html"
+        ds = await e.client.send_video(
+            e.chat_id, video=ok, force_document=True, caption="@ANIXPO", link_preview=False, thumb=thum, supports_streaming=True
         )
         os.remove(dl)
         os.remove(out)
