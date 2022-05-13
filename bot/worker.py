@@ -214,7 +214,7 @@ async def encod(event):
             ],
         )
         cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
-        cmd1 = f'ffmpeg -i "{dl}" -map 0 -ss 00:20 -frames:v 1 "{thumb}" -y'
+        cmd1 = f'ffmpeg -i "{dl}" -map 0:v -ss 00:20 -frames:v 1 "{thumb}" -y'
         process = await asyncio.create_subprocess_shell(
             cmd1, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
