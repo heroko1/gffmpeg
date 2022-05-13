@@ -7,6 +7,13 @@ from .FastTelethon import download_file, upload_file
 from .funcn import *
 from .config import *
 
+async def run_subprocess(cmd):
+    process = await asyncio.create_subprocess_shell(
+        cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    return await process.communicate()
 
 async def stats(e):
     try:
@@ -192,6 +199,7 @@ async def encod(event):
         bb = kk.replace(f".{aa}", ".mkv")
         newFile = dl.replace(f"downloads/", "").replace(f"_", " ")
         out = f"{rr}/{bb}"
+        output = out + 'thumb.jpg'
         thum = "thumb.jpg"
         dtime = ts(int((es - s).seconds) * 1000)
         e = xxx
@@ -205,6 +213,8 @@ async def encod(event):
             ],
         )
         cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
+        cmd1 = f'ffmpeg -i "{dl}" -map 0:v -map 0:a -ss 00:30 -t 30 "{output}" -y'
+        await run_subprocess(cmd1)
         process = await asyncio.create_subprocess_shell(
             cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
@@ -212,7 +222,7 @@ async def encod(event):
         er = stderr.decode()
         try:
             if er:
-                await e.edit(str(er) + "\n\n**ERROR**")
+                await e.edit(str(er) + "\n\n**ERROR** @Nirusaki_GOODBOY")
                 WORKING.clear()
                 os.remove(dl)
                 return os.remove(out)
@@ -243,10 +253,11 @@ async def encod(event):
         a1 = await info(dl, e)
         a2 = await info(out, e)
         dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
-        ds = await e.client.send_video(
-            e.chat_id, video=ok, force_document=True, caption="@ANIXPO", link_preview=False, thumb=thum, supports_streaming=True
+        ds = await e.client.send_file(
+            e.chat_id, file=ok, caption=bb, link_preview=False, thumb=thum, supports_streaming=True, name=bb
         )
         os.remove(dl)
+        os.remove(output)
         os.remove(out)
         WORKING.clear()
     except BaseException as er:
