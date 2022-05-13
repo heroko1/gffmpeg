@@ -1,0 +1,35 @@
+name: two
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [second]
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+         
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Install requirements
+        run: pip install --upgrade -r requirements.txt 
+
+      - name: install ffmpeg
+        run: sudo apt install ffmpeg
+
+      - name: erro404
+        timeout-minutes: 350
+        continue-on-error: true
+        run: python3 -m bot
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          API_HASH: ${{ secrets.API_HASH }} 
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          THUMBNAIL: ${{ secrets.THUMBNAIL }}
+          OWNER: ${{ secrets.OWNER }}
