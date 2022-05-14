@@ -219,7 +219,7 @@ async def something():
                 hehe = f"{out};{dl};{list(QUEUE.keys())[0]}"
                 wah = code(hehe)
                 nn = await e.edit(
-                    "**🗜 Compressing...**",
+                    f"**🗜 Encoding In Progress\n{joined_string}**",
                     buttons=[
                         [Button.inline("STATS", data=f"stats{wah}")],
                         [Button.inline("CANCEL", data=f"skip{wah}")],
