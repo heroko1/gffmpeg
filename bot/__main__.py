@@ -8,6 +8,8 @@ from .config import *
 from .worker import *
 from .devtools import *
 from .FastTelethon import *
+import anitopy
+from telethon.tl.types import DocumentAttributeVideo
 LOGS.info("Starting...")
 
 try:
@@ -150,6 +152,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(incoming=True))
 async def _(e):
+    await asyncio.sleep(3)
     await encod(e)
 
 
@@ -194,8 +197,24 @@ async def something():
                 newFile = dl.replace(f"downloads/", "").replace(f"_", " ")
                 rr = "encode"
                 bb = kk.replace(f".{aa}", ".mkv")
+                nam = bb
+                nam = nam.replace("_", " ")
+                nam = nam.replace(".mkv", " ")
+                nam = nam.replace(".mp4", " ")
+                nam = nam.replace(".", " ")
+                anitopy_options = {'allowed_delimiters': ' '}
+                new_name = anitopy.parse(nam)
+                anime_name = new_name['anime_title']  
+                joined_string = f"[{anime_name}]"
+                if 'anime_season' in new_name.keys():
+                  animes_season = new_name['anime_season']
+                  joined_string = f"{joined_string}" + f" [Season {animes_season}]"
+                if 'episode_number' in new_name.keys():
+                  episode_no = new_name['episode_number']
+                  joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
+                og = joined_string + "[@ANIXPO]"                
                 out = f"{rr}/{bb}"
-                thum = "thumb.jpg"
+                thum = "thumb1.jpg"
                 dtime = ts(int((es - s).seconds) * 1000)
                 hehe = f"{out};{dl};{list(QUEUE.keys())[0]}"
                 wah = code(hehe)
@@ -207,6 +226,11 @@ async def something():
                     ],
                 )
                 cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
+                duration, bitrate = await media_info(dl)
+                cmd1 = f'ffmpeg -i "{dl}" -map 0:v -ss 00:20 -frames:v 1 "{thum}" -y'
+                process = await asyncio.create_subprocess_shell(
+                    cmd1, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                )
                 process = await asyncio.create_subprocess_shell(
                     cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
                 )
@@ -247,11 +271,12 @@ async def something():
                 a2 = await info(out, e)
                 dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
                 ds = await e.client.send_file(
-                    e.chat_id, file=ok, force_document=True, caption=dk, link_preview=False, thumb=thum, parse_mode="html"
+                    e.chat_id, file=ok, supports_streaming=True, caption=og, thumb=thum, attributes=[DocumentAttributeVideo(duration=duration, w=1280, h=720)]
                 )
                 QUEUE.pop(list(QUEUE.keys())[0])
                 os.remove(dl)
                 os.remove(out)
+                os.remove(thumb)
             else:
                 await asyncio.sleep(3)
         except Exception as err:
