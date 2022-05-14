@@ -3,7 +3,7 @@
 #    Script Improved by Zylern
 from telethon import client
 import time
-from .FastTelethon import download_file
+from .FastTelethon import download_file, upload_file
 from .funcn import *
 from .config import *
 import anitopy
