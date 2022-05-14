@@ -6,6 +6,39 @@ import time
 from .FastTelethon import download_file, upload_file
 from .funcn import *
 from .config import *
+import anitopy
+from telethon.tl.types import DocumentAttributeVideo
+
+
+async def media_info(saved_file_path):
+  process = subprocess.Popen(
+    [
+      'ffmpeg', 
+      "-hide_banner", 
+      '-i', 
+      saved_file_path
+    ], 
+    stdout=subprocess.PIPE, 
+    stderr=subprocess.STDOUT
+  )
+  stdout, stderr = process.communicate()
+  output = stdout.decode().strip()
+  duration = re.search("Duration:\s*(\d*):(\d*):(\d+\.?\d*)[\s\w*$]",output)
+  bitrates = re.search("bitrate:\s*(\d+)[\s\w*$]",output)
+  
+  if duration is not None:
+    hours = int(duration.group(1))
+    minutes = int(duration.group(2))
+    seconds = math.floor(float(duration.group(3)))
+    total_seconds = ( hours * 60 * 60 ) + ( minutes * 60 ) + seconds
+  else:
+    total_seconds = None
+  if bitrates is not None:
+    bitrate = bitrates.group(1)
+  else:
+    bitrate = None
+  return total_seconds, bitrate
+
 
 async def run_subprocess(cmd):
     process = await asyncio.create_subprocess_shell(
@@ -51,7 +84,7 @@ async def dl_link(event):
         return await event.reply(f"**✅ Added {link} in QUEUE**")
     WORKING.append(1)
     s = dt.now()
-    xxx = await event.reply("**📥 Downloading...**")
+    xxx = await event.reply("**📥 Downloading **")
     try:
         dl = await fast_download(xxx, link, name)
     except Exception as er:
@@ -65,7 +98,23 @@ async def dl_link(event):
     rr = "encode"
     bb = kk.replace(f".{aa}", ".mkv")
     out = f"{rr}/{bb}"
-    thum = "thumb.jpg"
+    thum = "thumb.jpg1"
+    nam = bb
+    nam = nam.replace("_", " ")
+    nam = nam.replace(".mkv", " ")
+    nam = nam.replace(".mp4", " ")
+    nam = nam.replace(".", " ")
+    anitopy_options = {'allowed_delimiters': ' '}
+    new_name = anitopy.parse(nam)
+    anime_name = new_name['anime_title']  
+    joined_string = f"[{anime_name}]"
+    if 'anime_season' in new_name.keys():
+      animes_season = new_name['anime_season']
+      joined_string = f"{joined_string}" + f" [Season {animes_season}]"
+    if 'episode_number' in new_name.keys():
+      episode_no = new_name['episode_number']
+      joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
+    og = joined_string + "[@ANIXPO]"
     dtime = ts(int((es - s).seconds) * 1000)
     hehe = f"{out};{dl};0"
     wah = code(hehe)
@@ -77,6 +126,9 @@ async def dl_link(event):
         ],
     )
     cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
+    cmd1 = f'ffmpeg -i "{dl}" -map 0:v -ss 00:20 -frames:v 1 "{thum}" -y'
+    duration, bitrate = await media_info(dl)
+    await run_subprocess(cmd1)
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
     )
@@ -116,7 +168,7 @@ async def dl_link(event):
     a2 = await info(out, xxx)
     dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxxx}</i>"
     ds = await event.client.send_file(
-        event.chat_id, file=ok, caption=ok, force_document=True, link_preview=False, thumb=thum, name=ok
+        event.chat_id, file=ok, caption=og, supports_streaming=True, thumb=thum, name=og, attributes=[DocumentAttributeVideo(duration=duration)]
     )
     os.remove(dl)
     os.remove(out)
@@ -185,7 +237,7 @@ async def encod(event):
                     event.media,
                     dir,
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                        progress(d, t, xxx, ttt, f"**📥 Downloading**\n__{filename}__")
+                        progress(d, t, xxx, ttt, f"**📥 Downloading The Given File**\n__{filename}__")
                     ),
                 )
         except Exception as er:
@@ -200,20 +252,36 @@ async def encod(event):
         bb = kk.replace(f".{aa}", ".mkv")
         newFile = dl.replace(f"downloads/", "").replace(f"_", " ")
         out = f"{rr}/{bb}"
-        output = out + 'thumb.jpg'
+        nam = bb
+        nam = nam.replace("_", " ")
+        nam = nam.replace(".mkv", " ")
+        nam = nam.replace(".mp4", " ")
+        nam = nam.replace(".", " ")
+        anitopy_options = {'allowed_delimiters': ' '}
+        new_name = anitopy.parse(nam)
+        anime_name = new_name['anime_title']  
+        joined_string = f"[{anime_name}]"
+        if 'anime_season' in new_name.keys():
+          animes_season = new_name['anime_season']
+          joined_string = f"{joined_string}" + f" [Season {animes_season}]"
+        if 'episode_number' in new_name.keys():
+          episode_no = new_name['episode_number']
+          joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
+        og = joined_string + "[@ANIXPO]"    
         thum = "thumb.jpg"
         dtime = ts(int((es - s).seconds) * 1000)
         e = xxx
         hehe = f"{out};{dl};0"
         wah = code(hehe)
         nn = await e.edit(
-            "**🗜 Compressing...**",
+            f"**🗜 Encoding In Progress\n{joined_string}**",
             buttons=[
                 [Button.inline("STATS", data=f"stats{wah}")],
                 [Button.inline("CANCEL", data=f"skip{wah}")],
             ],
         )
         cmd = f"""ffmpeg -i "{dl}" {ffmpegcode[0]} "{out}" -y"""
+        duration, bitrate = await media_info(dl)
         cmd1 = f'ffmpeg -i "{dl}" -map 0:v -ss 00:20 -frames:v 1 "{thumb}" -y'
         process = await asyncio.create_subprocess_shell(
             cmd1, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
@@ -237,7 +305,7 @@ async def encod(event):
         ees = dt.now()
         ttt = time.time()
         await nn.delete()
-        nnn = await e.client.send_message(e.chat_id, "**📤 Uploading...**")
+        nnn = await e.client.send_message(e.chat_id, f"**📤 Uploading {joined_string}**")
         with open(out, "rb") as f:
             ok = await upload_file(
                 client=e.client,
@@ -260,7 +328,7 @@ async def encod(event):
         a2 = await info(out, e)
         dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
         ds = await e.client.send_file(
-            e.chat_id, file=ok, caption=bb, link_preview=False, thumb=thumb, supports_streaming=True, name=bb
+            e.chat_id, file=ok, caption=og, link_preview=False, thumb=thumb, supports_streaming=True, name=og, attributes=[DocumentAttributeVideo(duration=duration)]
         )
         os.remove(dl)
         os.remove(thumb)
