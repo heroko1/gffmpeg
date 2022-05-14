@@ -3,7 +3,7 @@
 #    Script Improved by Zylern
 from telethon import client
 import time
-from .FastTelethon import download_file, upload_file
+from .FastTelethon import download_file
 from .funcn import *
 from .config import *
 import anitopy
@@ -328,7 +328,7 @@ async def encod(event):
         a2 = await info(out, e)
         dk = f"<b>File Name:</b> {newFile}\n\n<b>Original File Size:</b> {hbs(org)}\n<b>Encoded File Size:</b> {hbs(com)}\n<b>Encoded Percentage:</b> {per}\n\n<b>Get Mediainfo Here:</b> <a href='{a1}'>Before</a>/<a href='{a2}'>After</a>\n\n<i>Downloaded in {x}\nEncoded in {xx}\nUploaded in {xxx}</i>"
         ds = await e.client.send_file(
-            e.chat_id, file=ok, caption=og, link_preview=False, thumb=thumb, supports_streaming=True, name=og, attributes=[DocumentAttributeVideo(duration=duration)]
+            e.chat_id, file=ok, caption=og, thumb=thumb, supports_streaming=True, name=og, attributes=[DocumentAttributeVideo(duration=duration)]
         )
         os.remove(dl)
         os.remove(thumb)
