@@ -288,7 +288,6 @@ async def encod(event):
         )
         stdout, stderr = await process.communicate()
         error = stderr.decode()
-        LOGS.info(error)
         process = await asyncio.create_subprocess_shell(
             cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
