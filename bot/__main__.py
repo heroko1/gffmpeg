@@ -153,7 +153,7 @@ async def _(event):
 @bot.on(events.NewMessage(incoming=True))
 async def _(e):
     await encod(e)
-    await asyncio.sleep(3)
+    time.sleep(3)
 
 
 async def something():
