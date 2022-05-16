@@ -176,6 +176,7 @@ async def dl_link(event):
 
 
 async def encod(event):
+    time.sleep(1)
     try:
         if not event.is_private:
             return
