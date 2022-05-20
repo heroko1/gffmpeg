@@ -212,7 +212,7 @@ async def something():
                 if 'episode_number' in new_name.keys():
                   episode_no = new_name['episode_number']
                   joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
-                og = joined_string + "[@ANIXPO]"                
+                og = joined_string + "[@onepieceseries]"                
                 out = f"{rr}/{bb}"
                 thum = "thumb1.jpg"
                 dtime = ts(int((es - s).seconds) * 1000)
