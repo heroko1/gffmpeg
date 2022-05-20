@@ -139,7 +139,7 @@ async def info(file, event):
     stdout, stderr = process.communicate()
     out = stdout.decode()
     client = TelegraphPoster(use_api=True)
-    client.create_api_token("TGVid-Comp-Mediainfo")
+    client.create_api_token("Onepieceseries")
     page = client.post(
         title="TGVid-Comp-Mediainfo",
         author=((await event.client.get_me()).first_name),
