@@ -50,7 +50,7 @@ async def zylern(event):
 
 async def help(event):
     await event.edit(
-        "┏━━━━━━━━━━━━━━━━━\n┣✋ Hello I Am AniXcoder\n┣🧳Just Send Me Files And I Will Start Encoding\n┣📸I Will Automatically Generate Thumbnail\n┣🦾I Can Also Auto Rename\n┣🦾Created And Maintaine By\n┣@NIRUSAKI_MARVALE & @FIERCE_MARVALE\n┗━━━━━━━━━━━━━━━━━"
+        "━━━━━━━━━━━━━HELLO━━━━━━━━━━━━━"
     )
     
 async def ihelp(e):
