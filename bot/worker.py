@@ -114,7 +114,7 @@ async def dl_link(event):
     if 'episode_number' in new_name.keys():
       episode_no = new_name['episode_number']
       joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
-    og = joined_string + "[@ANIXPO]"
+    og = joined_string + "[@onepieceseries]"
     dtime = ts(int((es - s).seconds) * 1000)
     hehe = f"{out};{dl};0"
     wah = code(hehe)
@@ -268,7 +268,7 @@ async def encod(event):
         if 'episode_number' in new_name.keys():
           episode_no = new_name['episode_number']
           joined_string = f"{joined_string}" + f" [Episode {episode_no}]"
-        og = joined_string + "[@ANIXPO]"    
+        og = joined_string + "[@onepieceseries]"    
         thum = "thumb.jpg"
         dtime = ts(int((es - s).seconds) * 1000)
         e = xxx
@@ -296,7 +296,7 @@ async def encod(event):
         er = stderr.decode()
         try:
             if er:
-                await e.edit(str(er) + "\n\n**ERROR** @Nirusaki_GOODBOY")
+                await e.edit(str(er) + "\n\n**ERROR** @onepieceseries")
                 WORKING.clear()
                 os.remove(dl)
                 return os.remove(out)
